@@ -1,0 +1,16 @@
+# 忽略所有编译产物
+build/
+dist/
+*.so
+*.o
+*.egg-info/
+
+# 忽略 Python 缓存和 NCU 报告
+__pycache__/
+*.ncu-rep
+*.log
+
+# 忽略隐藏的系统/环境文件夹
+.cache/
+.conda/
+.local/
