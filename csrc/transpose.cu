@@ -62,7 +62,7 @@ torch::Tensor transpose_naive(torch::Tensor input) {
     auto output = torch::empty({width, height}, input.options());
     dim3 blocks((width + TILE_DIM - 1) / TILE_DIM, (height + TILE_DIM - 1) / TILE_DIM);
     dim3 threads(TILE_DIM, TILE_DIM); // 1024 线程/Block，4090 满载
-    transpose_naive_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), width, height);
+    transpose_naive_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), height, width);
     return output;
 }
 
@@ -72,7 +72,7 @@ torch::Tensor transpose_shared(torch::Tensor input) {
     auto output = torch::empty({width, height}, input.options());
     dim3 blocks((width + TILE_DIM - 1) / TILE_DIM, (height + TILE_DIM - 1) / TILE_DIM);
     dim3 threads(TILE_DIM, TILE_DIM); // 1024 线程/Block，4090 满载
-    transpose_shared_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), width, height);
+    transpose_shared_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), height, width);
     return output;
 }
 
@@ -82,7 +82,7 @@ torch::Tensor transpose_shared_padding(torch::Tensor input) {
     auto output = torch::empty({width, height}, input.options());
     dim3 blocks((width + TILE_DIM - 1) / TILE_DIM, (height + TILE_DIM - 1) / TILE_DIM);
     dim3 threads(TILE_DIM, TILE_DIM); // 1024 线程/Block，4090 满载
-    transpose_padding_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), width, height);
+    transpose_padding_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), height, width);
     return output;
 }
 
@@ -92,6 +92,6 @@ torch::Tensor transpose_shared_swizzle(torch::Tensor input) {
     auto output = torch::empty({width, height}, input.options());
     dim3 blocks((width + TILE_DIM - 1) / TILE_DIM, (height + TILE_DIM - 1) / TILE_DIM);
     dim3 threads(TILE_DIM, TILE_DIM); // 1024 线程/Block，4090 满载
-    transpose_swizzle_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), width, height);
+    transpose_swizzle_kernel<<<blocks, threads>>>(input.data_ptr<float>(), output.data_ptr<float>(), height, width);
     return output;
 }
