@@ -14,7 +14,7 @@ METRIC_MAP = {
 }
 METRICS = list(METRIC_MAP.keys())
 SHAPES = [(1024, 1024, 1024), (2048, 2048, 2048), (4096, 4096, 4096)]
-VERSIONS = {0: "Naive", 1: "Tiled", 2: "Float4", 3: "PingPong"}
+VERSIONS = {0: "Naive", 1: "Tiled", 2: "Float4", 3: "PingPong", 4: "All Optimized"}
 
 def get_cublas_tflops(m, n, k):
     """
