@@ -122,7 +122,7 @@ __global__ void gemm_tiled_float4_kernel(int M, int N, int K, const float alpha,
         ***/
 #pragma unroll
         for(int i = 0; i<BM; i+=a_tile_stride){
-            int reg_idx = i/move_iters_a*4;
+            int reg_idx = i/a_tile_stride*4;
             FLOAT4_VAL(a_tile_reg[reg_idx]) = FLOAT4_VAL(A[OFFSET(a_tile_row+i, a_tile_col, K)]);
             As[OFFSET(a_tile_col, a_tile_row+i, BM)] = a_tile_reg[reg_idx];
             As[OFFSET(a_tile_col+1, a_tile_row+i, BM)] = a_tile_reg[reg_idx+1];
@@ -224,7 +224,7 @@ __global__ void gemm_pingpong_kernel(int M, int N, int K, const float alpha, con
      */
 #pragma unroll
     for(int i = 0; i<BM; i+=a_tile_stride){
-        int reg_idx = i/move_iters_a*4;
+        int reg_idx = i/a_tile_stride*4;
         FLOAT4_VAL(a_tile_reg[reg_idx]) = FLOAT4_VAL(A[OFFSET(a_tile_row+i, a_tile_col, K)]);
         As[0][OFFSET(a_tile_col, a_tile_row+i, BM)] = a_tile_reg[reg_idx];
         As[0][OFFSET(a_tile_col+1, a_tile_row+i, BM)] = a_tile_reg[reg_idx+1];
@@ -266,7 +266,7 @@ __global__ void gemm_pingpong_kernel(int M, int N, int K, const float alpha, con
         if(k<K){
 #pragma unroll
             for(int i = 0; i<BM; i+=a_tile_stride){
-                int reg_idx = i/move_iters_a*4;
+                int reg_idx = i/a_tile_stride*4;
                 FLOAT4_VAL(a_tile_reg[reg_idx]) = FLOAT4_VAL(A[OFFSET(a_tile_row+i, a_tile_col, K)]);
             }
 #pragma unroll
@@ -315,7 +315,7 @@ __global__ void gemm_pingpong_kernel(int M, int N, int K, const float alpha, con
              */
 #pragma unroll
             for(int i = 0; i<BM; i+=a_tile_stride){
-                int reg_idx = i/move_iters_a*4;
+                int reg_idx = i/a_tile_stride*4;
                 As[write_index][OFFSET(a_tile_col, i+a_tile_row, BM)] =\
                 a_tile_reg[reg_idx];
                 As[write_index][OFFSET(a_tile_col+1, i+a_tile_row, BM)] =\
@@ -412,7 +412,7 @@ __global__ void gemm_final_kernel(int M, int N, int K, const float alpha, const 
      */
 #pragma unroll
     for(int i = 0; i<BM; i+=a_tile_stride){
-        int reg_idx = i/move_iters_a*4;
+        int reg_idx = i/a_tile_stride*4;
         FLOAT4_VAL(a_tile_reg[reg_idx]) = FLOAT4_VAL(A[OFFSET(a_tile_row+i, a_tile_col, K)]);
         As[0][OFFSET(a_tile_col, a_tile_row+i, BM+4)] = a_tile_reg[reg_idx];
         As[0][OFFSET(a_tile_col+1, a_tile_row+i, BM+4)] = a_tile_reg[reg_idx+1];
@@ -454,7 +454,7 @@ __global__ void gemm_final_kernel(int M, int N, int K, const float alpha, const 
         if(k<K){
 #pragma unroll
             for(int i = 0; i<BM; i+=a_tile_stride){
-                int reg_idx = i/move_iters_a*4;
+                int reg_idx = i/a_tile_stride*4;
                 FLOAT4_VAL(a_tile_reg[reg_idx]) = FLOAT4_VAL(A[OFFSET(a_tile_row+i, a_tile_col, K)]);
             }
 #pragma unroll
@@ -503,7 +503,7 @@ __global__ void gemm_final_kernel(int M, int N, int K, const float alpha, const 
              */
 #pragma unroll
             for(int i = 0; i<BM; i+=a_tile_stride){
-                int reg_idx = i/move_iters_a*4;
+                int reg_idx = i/a_tile_stride*4;
                 As[write_index][OFFSET(a_tile_col, i+a_tile_row, BM+4)] =\
                 a_tile_reg[reg_idx];
                 As[write_index][OFFSET(a_tile_col+1, i+a_tile_row, BM+4)] =\
