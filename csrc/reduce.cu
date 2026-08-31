@@ -11,6 +11,14 @@ __device__ __forceinline__ float warp_reduce(float val) {
 
 // Block 级别的规约
 __device__ __forceinline__ float block_reduce(float val) {
+/***
+编译期确定大小
+不能像动态 shared memory 那样通过 launch 参数传大小。
+内存布局固定
+编译器知道这块 shared memory 的大小和位置。
+适合固定上限的归约
+注释里写“最多 32 个 Warp”，说明这里假设一个 block 最多 32 个 warp，所以开 32 个槽位刚好够用。
+***/
     static __shared__ float shared[32]; // 最多 32 个 Warp
     int lane = threadIdx.x % 32;
     int wid = threadIdx.x / 32;
